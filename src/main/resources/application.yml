@@ -16,4 +16,4 @@ spring:
     show-sql: true
 jwt:
   secret: mysecret.sjb_2023_.qwer1234.Dkagh1234! #${JWT_SECRET}
-  token.expired-time-ms: 2592000000 # 30 days
+  token.expired-time-ms: 2592000000
