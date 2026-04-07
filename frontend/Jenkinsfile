@@ -1,12 +1,16 @@
 pipeline {
   agent {
     kubernetes {
+      namespace 'luel'
       label "node-kaniko-${UUID.randomUUID().toString()}"
       defaultContainer 'node'
       yaml """
 apiVersion: v1
 kind: Pod
 spec:
+  serviceAccountName: jenkins
+  imagePullSecrets:
+    - name: dockerhub-cred
   restartPolicy: Never
   containers:
     - name: node
@@ -15,7 +19,7 @@ spec:
       tty: true
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      command: ['/busybox/sh','-c','sleep infinity']
+      command: ['/busybox/sh', '-c', 'sleep infinity']
       tty: true
       volumeMounts:
         - name: docker-config

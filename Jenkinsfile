@@ -1,12 +1,16 @@
 pipeline {
   agent {
     kubernetes {
+      namespace 'luel'
       label "gradle-kaniko-${UUID.randomUUID().toString()}"
       defaultContainer 'gradle'
       yaml """
 apiVersion: v1
 kind: Pod
 spec:
+  serviceAccountName: jenkins
+  imagePullSecrets:
+    - name: dockerhub-cred
   restartPolicy: Never
   containers:
     - name: gradle
@@ -18,7 +22,7 @@ spec:
           mountPath: /home/gradle/.gradle
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
-      command: ['/busybox/sh','-c','sleep infinity']
+      command: ['/busybox/sh', '-c', 'sleep infinity']
       tty: true
       volumeMounts:
         - name: docker-config
